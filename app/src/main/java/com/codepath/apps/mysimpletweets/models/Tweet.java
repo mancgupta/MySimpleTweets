@@ -6,12 +6,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by magupta on 11/8/15.
  */
-public class Tweet {
+public class Tweet implements Serializable{
     private String text;
     private Long id;
     private String createdAt;
