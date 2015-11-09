@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +32,10 @@ public class ComposeActivity extends AppCompatActivity {
     private TextView tvScreenName;
     private EditText etStatus;
     private TwitterClient client;
+    private MenuItem miCharacterCount;
+    private MenuItem miUpdateStatus;
+
+    private static final int MAX_TWEET_CHARACTERS = 140;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,33 @@ public class ComposeActivity extends AppCompatActivity {
 
     }
 
+    private void setListeners() {
+        etStatus.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int characterLeft = MAX_TWEET_CHARACTERS - s.length();
+                if (characterLeft < 0) {
+                    miUpdateStatus.setEnabled(false);
+                    miCharacterCount.setTitle("0");
+                }
+                else{
+                    miUpdateStatus.setEnabled(true);
+                    miCharacterCount.setTitle(String.valueOf(characterLeft));
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
     private void setUpViews() {
         ivProfilePicture = (ImageView) findViewById(R.id.ivProfileImage);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
@@ -65,6 +98,10 @@ public class ComposeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.compose, menu);
+        miCharacterCount = (MenuItem) menu.findItem(R.id.miCharacterCount);
+        miUpdateStatus = (MenuItem) menu.findItem(R.id.miUpdateStatus);
+
+        setListeners();
         return true;
     }
 

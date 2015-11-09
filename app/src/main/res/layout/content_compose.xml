@@ -30,7 +30,9 @@
         android:textColor="#000"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage"
-        android:layout_alignTop="@+id/ivProfileImage" />
+        android:layout_alignTop="@+id/ivProfileImage"
+        android:textIsSelectable="false"
+        android:textSize="18dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,7 +42,8 @@
         android:textColor="#777"
         android:layout_below="@+id/tvUsername"
         android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage" />
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:textSize="16dp" />
 
     <EditText
         android:layout_width="wrap_content"
