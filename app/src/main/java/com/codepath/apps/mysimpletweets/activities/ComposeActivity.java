@@ -36,17 +36,15 @@ public class ComposeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        try {
+        if ( toolbar != null ) {
+            setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setLogo(R.drawable.twitter);
             getSupportActionBar().setDisplayUseLogoEnabled(true);
         }
-        catch (NullPointerException e){
-            Log.i("DEBUG", e.toString());
-        }
+
         setUpViews();
+
         client = TwitterApplication.getRestClient();
         User user = (User) getIntent().getSerializableExtra("user");
 

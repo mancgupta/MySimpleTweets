@@ -24,6 +24,7 @@ public class TweetAdapter extends ArrayAdapter<Tweet> {
         TextView username;
         TextView tweetText;
         TextView screenName;
+        TextView timePosted;
     }
 
     public TweetAdapter(Context context, List<Tweet> objects) {
@@ -43,6 +44,7 @@ public class TweetAdapter extends ArrayAdapter<Tweet> {
             viewHolder.username = (TextView) convertView.findViewById(R.id.tvUsername);
             viewHolder.tweetText = (TextView) convertView.findViewById(R.id.tvTweetText);
             viewHolder.screenName = (TextView) convertView.findViewById(R.id.tvScreenName);
+            viewHolder.timePosted = (TextView) convertView.findViewById(R.id.tvTimePosted);
 
             convertView.setTag(viewHolder);
         }
@@ -53,6 +55,7 @@ public class TweetAdapter extends ArrayAdapter<Tweet> {
         viewHolder.username.setText(tweet.getUser().getName());
         viewHolder.tweetText.setText(tweet.getText());
         viewHolder.screenName.setText(tweet.getUser().getScreenName());
+        viewHolder.timePosted.setText(tweet.getRelativeTimeAgo(tweet.getCreatedAt()));
 
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.profileImage);
 

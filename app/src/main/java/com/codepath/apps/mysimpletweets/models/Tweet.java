@@ -7,7 +7,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by magupta on 11/8/15.
@@ -65,6 +68,36 @@ public class Tweet implements Serializable{
         return tweets;
     }
 
+    public String getRelativeTimeAgo(String rawJsonDate) {
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = System.currentTimeMillis() - sf.parse(rawJsonDate).getTime();
+            int seconds = (int) (dateMillis/1000);
+            int minutes = seconds/60;
+            int hours = minutes/60;
+            int days = hours /24;
+            int weeks = days /7;
+
+            if ( weeks > 0)
+                return weeks + " w";
+            if (days > 0)
+                return days + " d";
+            if (hours > 0)
+                return hours + " h";
+            if (minutes > 0)
+                return minutes + " m";
+            return seconds + " s";
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return relativeDate;
+    }
 }
 
 /*
