@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.clients;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -27,6 +28,9 @@ public class TwitterClient extends OAuthBaseClient {
     public static final String REST_CONSUMER_KEY = "gmT1sCcWbNLVqHqrqu0M0cXPC";       // Change this
     public static final String REST_CONSUMER_SECRET = "Cm1rxeLXGZEBas49DauDzfCJCVkap5S11pGNERru1aOnb9fy2e"; // Change this
     public static final String REST_CALLBACK_URL = "oauth://mytwitterclient"; // Change this (here and in manifest)
+
+    private static int PAGE_SIZE = 25;
+    public int page = 1;
 
     public TwitterClient(Context context) {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
@@ -55,10 +59,11 @@ public class TwitterClient extends OAuthBaseClient {
         // API URL
         String apiUrl = getApiUrl("statuses/home_timeline.json");
 
+        Log.i("DEBUG", "************SINCE ID : " + ((page - 1) * PAGE_SIZE + 1));
         //Specify params
         RequestParams params = new RequestParams();
-        params.put("count", 25);
-        params.put("since_id", 1);
+        params.put("count", PAGE_SIZE);
+        params.put("since_id", (page - 1) * PAGE_SIZE + 1);
 
         // Call API
         getClient().get(apiUrl, params, handler);

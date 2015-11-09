@@ -18,6 +18,7 @@ import com.codepath.apps.mysimpletweets.adapters.TweetAdapter;
 import com.codepath.apps.mysimpletweets.clients.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.utilities.EndlessScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -59,8 +60,23 @@ public class TimelineActivity extends AppCompatActivity {
         });
 
         setUpItems();
+        setUpEvents();
         fetchUser();
         populateTimeline();
+    }
+
+    private void setUpEvents() {
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                client.page = page;
+                populateTimeline();
+                // or customLoadMoreDataFromApi(totalItemsCount);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
+            }
+        });
     }
 
     private void fetchUser() {
