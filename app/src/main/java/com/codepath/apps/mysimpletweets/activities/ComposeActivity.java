@@ -25,7 +25,6 @@ import org.json.JSONObject;
 
 public class ComposeActivity extends AppCompatActivity {
 
-    private User user;
     private ImageView ivProfilePicture;
     private TextView tvUsername;
     private TextView tvScreenName;
@@ -49,7 +48,7 @@ public class ComposeActivity extends AppCompatActivity {
         }
         setUpViews();
         client = TwitterApplication.getRestClient();
-        user = (User)getIntent().getSerializableExtra("user");
+        User user = (User) getIntent().getSerializableExtra("user");
 
         Picasso.with(ComposeActivity.this).load(user.getProfileImageUrl()).into(ivProfilePicture);
         tvUsername.setText(user.getName());

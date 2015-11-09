@@ -18,6 +18,14 @@ import java.util.List;
  * Created by magupta on 11/8/15.
  */
 public class TweetAdapter extends ArrayAdapter<Tweet> {
+
+    private static class ViewHolder {
+        ImageView profileImage;
+        TextView username;
+        TextView tweetText;
+        TextView screenName;
+    }
+
     public TweetAdapter(Context context, List<Tweet> objects) {
         super(context, android.R.layout.simple_list_item_1, objects);
     }
@@ -25,18 +33,29 @@ public class TweetAdapter extends ArrayAdapter<Tweet> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Tweet tweet = getItem(position);
-
+        ViewHolder viewHolder;
         if ( convertView == null ){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.tweet_item, parent, false);
+            viewHolder = new ViewHolder();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.tweet_item, parent, false);
+
+            viewHolder.profileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
+            viewHolder.username = (TextView) convertView.findViewById(R.id.tvUsername);
+            viewHolder.tweetText = (TextView) convertView.findViewById(R.id.tvTweetText);
+            viewHolder.screenName = (TextView) convertView.findViewById(R.id.tvScreenName);
+
+            convertView.setTag(viewHolder);
+        }
+        else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        ImageView ivProfilePicture = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-        TextView tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
-        TextView tvTweetText = (TextView) convertView.findViewById(R.id.tvTweetText);
+        viewHolder.username.setText(tweet.getUser().getName());
+        viewHolder.tweetText.setText(tweet.getText());
+        viewHolder.screenName.setText(tweet.getUser().getScreenName());
 
-        tvUsername.setText(tweet.getUser().getName());
-        tvTweetText.setText(tweet.getText());
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfilePicture);
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.profileImage);
+
         return convertView;
     }
 }
