@@ -26,8 +26,4 @@ public class TwitterApplication extends com.activeandroid.app.Application {
         return (TwitterClient) TwitterClient.getInstance(TwitterClient.class, TwitterApplication.context);
     }
 
-    //Todo to stop calling api again
-//    public static User getCurrentUser() {
-//        return getRestClient().getCurrentUser();
-//    }
 }

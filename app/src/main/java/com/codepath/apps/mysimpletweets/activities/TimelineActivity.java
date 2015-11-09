@@ -35,6 +35,7 @@ public class TimelineActivity extends AppCompatActivity {
     private ListView lvTweets;
     private User currentUser;
     private SwipeRefreshLayout swipeContainer;
+    private final int REQUEST_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,8 @@ public class TimelineActivity extends AppCompatActivity {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
+                tweetAdapter.clear();
+                client.page = 1;
                 populateTimeline();
             }
         });
@@ -107,10 +110,9 @@ public class TimelineActivity extends AppCompatActivity {
         client.getHomeTimeline(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                tweets.addAll(Tweet.fromJSONArray(response));
-                Log.i("DEBUG", String.valueOf(tweets.size()));
-                swipeContainer.setRefreshing(false);
+                tweetAdapter.addAll(Tweet.fromJSONArray(response));
                 tweetAdapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
             }
 
             @Override
@@ -130,10 +132,20 @@ public class TimelineActivity extends AppCompatActivity {
         Intent i = new Intent(this, ComposeActivity.class);
         if (currentUser != null) {
             i.putExtra("user", currentUser);
-            startActivity(i);
+            startActivityForResult(i, REQUEST_CODE);
         }
         else{
             Toast.makeText(this, "Unable to fetch User profile", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            Tweet tweet = (Tweet) data.getSerializableExtra("tweet");
+            tweetAdapter.insert(tweet, 0);
+            tweetAdapter.notifyDataSetChanged();
         }
     }
 }
